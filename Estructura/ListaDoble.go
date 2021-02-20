@@ -6,62 +6,63 @@ import (
 )
 
 type Nodo struct {
-	siguiente *Nodo
-	anterior *Nodo
-
-	tienda *Datos.Tienda
+	Siguiente *Nodo
+	Anterior *Nodo
+	Tienda *Datos.Tienda
+	IdNodo int
 }
 
 type ListaDoble struct {
-	primero *Nodo
-	ultimo *Nodo
-	idNodo int
+	Primero *Nodo
+	Ultimo *Nodo
+	Identificador  string
+	Contador int
 }
 
-func NewNodo(tienda *Datos.Tienda) *Nodo  {
-	return &Nodo{nil,nil,tienda}
+func NewNodo(tienda *Datos.Tienda, idNodo int) *Nodo  {
+	return &Nodo{nil,nil,tienda, idNodo}
 }
 
-func NewListaDoble() *ListaDoble {
-	return &ListaDoble{nil,nil, 0}
+func NewListaDoble(identificador string) *ListaDoble {
+	return &ListaDoble{nil,nil, identificador, 0 }
 }
 
-func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble)  {
-	var nuevoNodo = NewNodo(tienda)
+func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {
+	var nuevoNodo = NewNodo(tienda, idNodo)
 
-	if listaDoble.primero == nil{ //lista vacía inserto en el primero
-		listaDoble.primero = nuevoNodo
-		listaDoble.ultimo = nuevoNodo
-		listaDoble.idNodo += 1
-		Imprimir(listaDoble)
+	if listaDoble.Primero == nil{ //lista vacía inserto en el primero
+		listaDoble.Primero = nuevoNodo
+		listaDoble.Ultimo = nuevoNodo
+		listaDoble.Contador += 1
+		//Imprimir(listaDoble)
 	}else { //para una lista no vacia
-		aux := listaDoble.primero
+		aux := listaDoble.Primero
 
 		for aux != nil{
-			if aux.tienda.Nombre > tienda.Nombre {
-				if aux.siguiente == nil{ //llego al final de la lista, si o si insertar nodo
-					aux.siguiente = nuevoNodo
-					nuevoNodo.anterior = aux
-					listaDoble.idNodo += 1
-					Imprimir(listaDoble)
+			if aux.Tienda.Nombre > tienda.Nombre {
+				if aux.Siguiente == nil{ //llego al final de la lista, si o si insertar nodo
+					aux.Siguiente = nuevoNodo
+					nuevoNodo.Anterior = aux
+					listaDoble.Contador += 1
+					//Imprimir(listaDoble)
 					break
 				}else {
-					aux = aux.siguiente
+					aux = aux.Siguiente
 				}
-			}else if aux.tienda.Nombre < tienda.Nombre{
-				if aux == listaDoble.primero{
-					listaDoble.primero = nuevoNodo
-					nuevoNodo.siguiente = aux
-					aux.anterior = nuevoNodo
-					listaDoble.idNodo += 1
-					Imprimir(listaDoble)
+			}else if aux.Tienda.Nombre < tienda.Nombre{
+				if aux == listaDoble.Primero{
+					listaDoble.Primero = nuevoNodo
+					nuevoNodo.Siguiente = aux
+					aux.Anterior = nuevoNodo
+					listaDoble.Contador += 1
+					//Imprimir(listaDoble)
 				}else{
-					aux.anterior.siguiente = nuevoNodo
-					aux.anterior = nuevoNodo
-					nuevoNodo.siguiente = aux
-					nuevoNodo.anterior = aux.anterior
-					listaDoble.idNodo += 1
-					Imprimir(listaDoble)
+					aux.Anterior.Siguiente = nuevoNodo
+					aux.Anterior = nuevoNodo
+					nuevoNodo.Siguiente = aux
+					nuevoNodo.Anterior = aux.Anterior
+					listaDoble.Contador += 1
+					//Imprimir(listaDoble)
 					break
 				}
 			}
@@ -69,11 +70,10 @@ func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble)  {
 	}
 }
 func Imprimir(lista *ListaDoble){
-	fmt.Println("LLego a print")
-	aux :=lista.primero
+	aux :=lista.Primero
 	for aux != nil{
-		fmt.Printf("Nombre %v ->", aux.tienda.Nombre)
-		aux = aux.siguiente
+		fmt.Printf("Nombre %v ->", aux.Tienda.Nombre)
+		aux = aux.Siguiente
 	}
 	fmt.Println("\n")
 }
