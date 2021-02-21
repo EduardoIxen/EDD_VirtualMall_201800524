@@ -276,12 +276,39 @@ func busquedaEspecifica(w http.ResponseWriter, r *http.Request){
 	}
 }
 
+func busquedaDePosicion(w http.ResponseWriter, r *http.Request)  {
+	variables := mux.Vars(r)
+	idPosicion, err := strconv.Atoi(variables["id"])
+	if err != nil{
+		fmt.Fprintf(w, "ERROR// Id inválido")
+	}
+	if idPosicion > len(vector){
+		fmt.Fprintf(w, "-----------EL VECTOR NO TIENE TANTAS POSICIONES-----------")
+	}else {
+		for i, vect := range vector{
+			if i == idPosicion - 1{
+				if vect.Primero != nil{
+					aux := vect.Primero
+					for aux != nil{
+						w.Header().Set("Content-Type", "application/json")
+						json.NewEncoder(w).Encode(aux.Tienda)
+						aux = aux.Siguiente
+					}
+				}else {
+					fmt.Fprintf(w, "-------------NO SE ENCUENTRAN TIENDAS EN ESTA POSICION----------")
+				}
+			}
+		}
+	}
+}
+
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", indexRoute)
 	router.HandleFunc("/cargartienda", cargartienda).Methods("POST")
 	router.HandleFunc("/getArreglo", generarGrafo).Methods("GET")
 	router.HandleFunc("/TiendaEspecifica", busquedaEspecifica).Methods("POST")
+	router.HandleFunc("/id/{id}", busquedaDePosicion).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 
