@@ -17,14 +17,16 @@ type ListaDoble struct {
 	Ultimo *Nodo
 	Identificador  string
 	Contador int
+	Departamento string
+	Indice string
 }
 
 func NewNodo(tienda *Datos.Tienda, idNodo int) *Nodo  {
 	return &Nodo{nil,nil,tienda, idNodo}
 }
 
-func NewListaDoble(identificador string) *ListaDoble {
-	return &ListaDoble{nil,nil, identificador, 0 }
+func NewListaDoble(identificador string, departamento string, indice string) *ListaDoble {
+	return &ListaDoble{nil,nil, identificador, 0 , departamento, indice}
 }
 
 func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {

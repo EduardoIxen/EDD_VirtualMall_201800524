@@ -14,10 +14,6 @@ import (
 	"strconv"
 )
 
-type datoVector struct {
-	listaDoble *Estructura.ListaDoble
-}
-
 type calificaciones []*Estructura.ListaDoble
 var vector = calificaciones{}
 
@@ -29,6 +25,12 @@ var lsDep = allDep{}
 
 type allIndex []string
 var lsIndex = allIndex{}
+
+type busqueda struct {
+	Departamento string `json:"Departamento"`
+	Nombre       string `json:"Nombre"`
+	Calificacion int    `json:"Calificacion"`
+}
 
 func cargartienda(w http.ResponseWriter, r *http.Request)  {
 	listaDatos = allData{}
@@ -78,11 +80,11 @@ func cargartienda(w http.ResponseWriter, r *http.Request)  {
 				for _, depa := range contenido.Departamentos{
 					if depa.Nombre == auxDepa{
 						fmt.Println("Departamento= ", depa.Nombre)
-						var lista1 = Estructura.NewListaDoble("1")
-						var lista2 = Estructura.NewListaDoble("2")
-						var lista3 = Estructura.NewListaDoble("3")
-						var lista4 = Estructura.NewListaDoble("4")
-						var lista5 = Estructura.NewListaDoble("5")
+						var lista1 = Estructura.NewListaDoble("1", depa.Nombre, contenido.Indice)
+						var lista2 = Estructura.NewListaDoble("2", depa.Nombre, contenido.Indice)
+						var lista3 = Estructura.NewListaDoble("3", depa.Nombre, contenido.Indice)
+						var lista4 = Estructura.NewListaDoble("4", depa.Nombre, contenido.Indice)
+						var lista5 = Estructura.NewListaDoble("5", depa.Nombre, contenido.Indice)
 						for _, tienda := range depa.Tiendas{
 							contador += 1
 							fmt.Println("\t ", tienda.Nombre)
@@ -130,14 +132,14 @@ func cargartienda(w http.ResponseWriter, r *http.Request)  {
 		Estructura.Imprimir(vec)
 	}
 	fmt.Println("Tamaño del vector",len(vector))
-	generarGrafo()
+	//generarGrafo()
 
 	//w.Header().Set("Content-Type", "application/json")
 	//w.WriteHeader(http.StatusCreated)
 	//json.NewEncoder(w).Encode(nuevaEntrada)
 }
 
-func generarGrafo()  {
+func generarGrafo(W http.ResponseWriter, r *http.Request)  {
 	err3 := os.Remove("grafo.dot")
 	if err3 != nil {
 		fmt.Printf("Error eliminando archivo: %v\n", err3)
@@ -152,7 +154,7 @@ func generarGrafo()  {
 	enlaceLista := ""
 	for i, vect := range vector{
 		if i == 0{
-			nodo += "vec" +""+ "[height=1 width="+strconv.Itoa(len(vector)*2)+" label=\"<f"+strconv.Itoa(i+1)+"> "+strconv.Itoa(i+1)+" |"
+			nodo += "vec" +""+ "[height=1 width="+strconv.Itoa(len(vector)*3)+" label=\"<f"+strconv.Itoa(i+1)+"> "+strconv.Itoa(i+1)+" |"
 			if vect.Primero != nil{
 				aux := vect.Primero
 				for aux != nil {
@@ -206,7 +208,6 @@ func generarGrafo()  {
 	}
 	acum += nodo + enlace + nodoLista + enlaceLista + "\n}\n"
 
-	//creacion del archivo
 	var _, err = os.Stat(path)
 	if os.IsNotExist(err){
 		var file, err = os.Create(path)
@@ -217,21 +218,17 @@ func generarGrafo()  {
 		fmt.Println("Se ha creado un archivo")
 	}
 
-	//AHORA ESCRIBIEMOS EN EL ARCHIVO
-
 	var file, err2 = os.OpenFile(path, os.O_RDWR, 0644)
 	if existeError(err2) {
 		return
 	}
 	defer file.Close()
 
-	//SE ESCRIBE EN ARCHIVO
 	_, err = file.WriteString(acum)
 	if existeError(err) {
 		return
 	}
 
-	// Salva los cambios
 	err = file.Sync()
 	if existeError(err) {
 		return
@@ -239,7 +236,6 @@ func generarGrafo()  {
 
 	fmt.Println("Archivo actualizado existosamente.")
 
-	//PARTE EN DONDE GENERO EL GRAFO
 	path2, _ := exec.LookPath("dot")
 	cmd, _ := exec.Command(path2, "-Tpng","grafo.dot").Output()
 	mode := int(0777)
@@ -253,10 +249,39 @@ func existeError(err error) bool{
 	return (err != nil)
 }
 
+func busquedaEspecifica(w http.ResponseWriter, r *http.Request){
+	var busqueda busqueda
+	consulta, err := ioutil.ReadAll(r.Body)
+	if err != nil{
+		fmt.Fprintf(w, "Entrada invalida, intente nuevamente")
+	}
+	json.Unmarshal(consulta, &busqueda)
+	for _, vect := range vector{
+		if vect.Departamento == busqueda.Departamento && vect.Identificador == strconv.Itoa(busqueda.Calificacion){
+			if vect.Primero != nil{
+				aux := vect.Primero
+				for aux != nil{
+					if aux.Tienda.Nombre == busqueda.Nombre{
+						w.Header().Set("Content-Type", "application/json")
+						json.NewEncoder(w).Encode(aux.Tienda)
+						break
+					}
+					aux = aux.Siguiente
+				}
+				if aux == nil{
+					fmt.Fprintf(w, "------------TIENDA NO ENCONTRADA------------")
+				}
+			}
+		}
+	}
+}
+
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", indexRoute)
 	router.HandleFunc("/cargartienda", cargartienda).Methods("POST")
+	router.HandleFunc("/getArreglo", generarGrafo).Methods("GET")
+	router.HandleFunc("/TiendaEspecifica", busquedaEspecifica).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 
