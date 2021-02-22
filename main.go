@@ -302,6 +302,70 @@ func busquedaDePosicion(w http.ResponseWriter, r *http.Request)  {
 	}
 }
 
+func eliminar(w http.ResponseWriter, r *http.Request){
+	rIndice := 0
+	rDepa := 0
+	rCalif := 0
+	rPosi := 0
+	var busqueda busqueda
+	consulta, err := ioutil.ReadAll(r.Body)
+	if err != nil{
+		fmt.Fprintf(w, "--------------ENTRADA INVALIDA, INTENTE NUEVAMETE--------------")
+	}
+	json.Unmarshal(consulta, &busqueda)
+	for _, vect := range vector{
+		contadorPosicion := 0
+		if vect.Departamento == busqueda.Departamento && vect.Identificador == strconv.Itoa(busqueda.Calificacion){
+			if vect.Primero != nil{
+				aux := vect.Primero
+				for aux != nil{
+					contadorPosicion += 1
+					for i, indice := range lsIndex{
+						if indice == vect.Indice{
+							rIndice = i + 1
+						}
+					}
+					for i, dep := range lsDep{
+						if dep == busqueda.Departamento{
+							rDepa = i + 1
+						}
+					}
+					if aux.Tienda.Nombre == busqueda.Nombre{
+						rCalif = aux.Tienda.Calificacion
+						rPosi = contadorPosicion
+						if aux.Siguiente == nil{
+							if aux == vect.Primero{
+								vect.Primero = nil
+								respuesta := strconv.Itoa(rIndice) +", "+ strconv.Itoa(rDepa) +", "+strconv.Itoa(rCalif)+", "+strconv.Itoa(rPosi)
+								fmt.Fprintf(w, "Tienda elimincada carrectamente ( %v )", respuesta)
+								break
+							}else {
+								aux.Anterior.Siguiente = nil
+								respuesta := strconv.Itoa(rIndice) +", "+ strconv.Itoa(rDepa) +", "+strconv.Itoa(rCalif)+", "+strconv.Itoa(rPosi)
+								fmt.Fprintf(w, "Tienda elimincada carrectamente ( %v )", respuesta)
+								break
+							}
+						}else if aux == vect.Primero{
+							aux.Siguiente.Anterior = nil
+							vect.Primero = aux.Siguiente
+							respuesta := strconv.Itoa(rIndice) +", "+ strconv.Itoa(rDepa) +", "+strconv.Itoa(rCalif)+", "+strconv.Itoa(rPosi)
+							fmt.Fprintf(w, "Tienda elimincada carrectamente ( %v )", respuesta)
+							break
+						}else {
+							aux.Anterior.Siguiente = aux.Siguiente
+							aux.Siguiente.Anterior = aux.Anterior
+							respuesta := strconv.Itoa(rIndice) +", "+ strconv.Itoa(rDepa) +", "+strconv.Itoa(rCalif)+", "+strconv.Itoa(rPosi)
+							fmt.Fprintf(w, "Tienda elimincada carrectamente ( %v )", respuesta)
+							break
+						}
+					}
+					aux = aux.Siguiente
+				}
+			}
+		}
+	}
+}
+
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", indexRoute)
@@ -309,6 +373,7 @@ func main() {
 	router.HandleFunc("/getArreglo", generarGrafo).Methods("GET")
 	router.HandleFunc("/TiendaEspecifica", busquedaEspecifica).Methods("POST")
 	router.HandleFunc("/id/{id}", busquedaDePosicion).Methods("GET")
+	router.HandleFunc("/Eliminar", eliminar).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 

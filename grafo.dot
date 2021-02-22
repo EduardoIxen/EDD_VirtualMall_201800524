@@ -5,7 +5,6 @@ digraph G {
 3[label="Nombre: Balderas y Agosto \n Calificacion: 3"];
 5[label="Nombre: Prueba mía \n Calificacion: 5"];
 4[label="Nombre: Bueno Santacruz e Hijos \n Calificacion: 5"];
-2[label="Nombre: Badillo Ramírez e Hijos \n Calificacion: 5"];
 6[label="Nombre: Coronado e Hijos \n Calificacion: 3"];
 7[label="Nombre: Adorno y Camacho \n Calificacion: 3"];
 8[label="Nombre: Bermúdez y Ceballos \n Calificacion: 2"];
@@ -31,8 +30,6 @@ vec:f8 -> 3;
 5->4;
 4->5;
 vec:f10 -> 5;
-4->2;
-2->4;
 vec:f13 -> 6;
 vec:f18 -> 7;
 8->9;
