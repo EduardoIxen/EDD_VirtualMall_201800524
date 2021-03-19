@@ -1,8 +1,10 @@
 package main
 
 import (
+	"ProyectoEDD/Arboles"
 	"ProyectoEDD/Datos"
 	"ProyectoEDD/Estructura"
+	"ProyectoEDD/Grafo"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -31,6 +33,12 @@ type busqueda struct {
 	Nombre       string `json:"Nombre"`
 	Calificacion int    `json:"Calificacion"`
 }
+
+type allInv []*Arboles.ContInventarios
+var listaInventarios = allInv{}
+
+type singleInv []*Arboles.Inventario
+var lsSingleInv = singleInv{}
 
 func cargartienda(w http.ResponseWriter, r *http.Request)  {
 	listaDatos = allData{}
@@ -65,6 +73,7 @@ func cargartienda(w http.ResponseWriter, r *http.Request)  {
 				departamentos += 1
 				lsDep = append(lsDep, depa.Nombre)
 			}
+			//lsDep = append(lsDep, "/////////////////////////////////////////////")  //OJOOOOOO ACA
 			break
 		}
 	}
@@ -87,21 +96,22 @@ func cargartienda(w http.ResponseWriter, r *http.Request)  {
 						var lista5 = Estructura.NewListaDoble("5", depa.Nombre, contenido.Indice)
 						for _, tienda := range depa.Tiendas{
 							contador += 1
+							fmt.Println("Contadooooooorrrrrr", contador)
 							fmt.Println("\t ", tienda.Nombre)
 							if tienda.Calificacion == 1 {
-								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion)
+								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion, tienda.Logo)
 								Estructura.Insertar(t, lista1,contador)
 							} else if tienda.Calificacion == 2 {
-								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion)
+								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion, tienda.Logo)
 								Estructura.Insertar(t, lista2,contador)
 							} else if tienda.Calificacion == 3 {
-								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion)
+								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion, tienda.Logo)
 								Estructura.Insertar(t, lista3,contador)
 							} else if tienda.Calificacion == 4 {
-								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion)
+								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion, tienda.Logo)
 								Estructura.Insertar(t, lista4,contador)
 							} else if tienda.Calificacion == 5 {
-								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion)
+								var t = Datos.NewTienda(tienda.Nombre, tienda.Descripcion, tienda.Contacto, tienda.Calificacion, tienda.Logo)
 								Estructura.Insertar(t, lista5,contador)
 							}
 							fmt.Println("Lista1----------")
@@ -139,6 +149,69 @@ func cargartienda(w http.ResponseWriter, r *http.Request)  {
 	//json.NewEncoder(w).Encode(nuevaEntrada)
 }
 
+func cargarInventario(W http.ResponseWriter, r *http.Request){
+	listaInventarios = allInv{}
+	lsSingleInv = singleInv{}
+	var nuevaEntrada *Arboles.ContInventarios
+	reqBody, err := ioutil.ReadAll(r.Body)
+
+	if err != nil{
+		fmt.Fprintf(W, "----Error al cargar inventarios----")
+	}
+
+	json.Unmarshal(reqBody, &nuevaEntrada)
+	listaInventarios = append(listaInventarios, nuevaEntrada)
+
+	for _, dat := range listaInventarios {
+		//fmt.Println("dat ",dat.Inventarios)
+		for _, inv := range dat.Inventarios{
+			fmt.Println("Departamento ",inv.Departamento)
+			fmt.Println("Calificacion ",inv.Calificacion)
+			fmt.Println("Tienda ",inv.Tienda)
+			arbolInv := Arboles.Nuevo_Arbol()
+			for _, prod := range inv.Productos{
+				var pr = Arboles.NewProduct(prod.Nombre, prod.Codigo, prod.Descripcion, prod.Precio, prod.Cantidad, prod.Imagen)
+				Arboles.Insert(arbolInv, pr)
+				//fmt.Println(prod)
+			}
+			aux := &*vector[obtenerPosicion(inv.Departamento, inv.Calificacion, inv.Tienda)].Primero
+			for aux != nil{
+				if aux.Tienda.Nombre == inv.Tienda{
+					aux.Tienda.ArbolProd = &*arbolInv
+					//aux.Tienda.ArbolProd = *arbolInv
+					fmt.Println("Arbol insertado")
+				}
+				aux = aux.Siguiente
+			}
+			/*deppr := vector[obtenerPosicion(inv.Departamento, inv.Calificacion, inv.Tienda)].Departamento
+			indcpr := vector[obtenerPosicion(inv.Departamento, inv.Calificacion, inv.Tienda)].Indice
+			calipr := vector[obtenerPosicion(inv.Departamento, inv.Calificacion, inv.Tienda)].Identificador*/
+
+		}
+	}
+	Grafo.Generar_Grafo(vector[1].Primero.Tienda.ArbolProd)
+
+}
+func obtenerPosicion(departamento string, calificacion int, tienda string) int{
+	//--------------ALGORITMO DE BUSQUEDA EN VECTORES COLUMN MAJOR-----------------
+	var j = 0
+	var i = 0
+	var tamFilas = 0
+	var k = 0
+	for indice, dat := range lsDep  {
+		if dat == departamento{
+			j = indice
+		}
+	}
+	for indice2, dat2 := range lsIndex{
+		if dat2 == string(tienda[0]){
+			i = indice2
+		}
+	}
+	tamFilas = len(lsIndex)
+	k = calificacion - 1
+	return (j*tamFilas+i)*5+k
+}
 func generarGrafo(W http.ResponseWriter, r *http.Request)  {
 	err3 := os.Remove("grafo.dot")
 	if err3 != nil {
@@ -443,6 +516,7 @@ func main() {
 	router.HandleFunc("/id/{id}", busquedaDePosicion).Methods("GET")
 	router.HandleFunc("/Eliminar", eliminar).Methods("DELETE")
 	router.HandleFunc("/guardar", guardar).Methods("GET")
+	router.HandleFunc("/cargarInventarios", cargarInventario).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 

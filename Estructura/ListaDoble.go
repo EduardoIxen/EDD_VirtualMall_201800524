@@ -36,6 +36,7 @@ func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {
 		listaDoble.Primero = nuevoNodo
 		listaDoble.Ultimo = nuevoNodo
 		listaDoble.Contador += 1
+		fmt.Println("Agregado en cabeza")
 		//Imprimir(listaDoble)
 	}else { //para una lista no vacia
 		aux := listaDoble.Primero
@@ -46,6 +47,7 @@ func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {
 					aux.Siguiente = nuevoNodo
 					nuevoNodo.Anterior = aux
 					listaDoble.Contador += 1
+					fmt.Println("Agregado al final")
 					//Imprimir(listaDoble)
 					break
 				}else {
@@ -57,13 +59,16 @@ func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {
 					nuevoNodo.Siguiente = aux
 					aux.Anterior = nuevoNodo
 					listaDoble.Contador += 1
+					fmt.Println("Agregado en cabeza no primero")
+					break
 					//Imprimir(listaDoble)
 				}else{
 					aux.Anterior.Siguiente = nuevoNodo
+					nuevoNodo.Anterior = aux.Anterior
 					aux.Anterior = nuevoNodo
 					nuevoNodo.Siguiente = aux
-					nuevoNodo.Anterior = aux.Anterior
 					listaDoble.Contador += 1
+					fmt.Println("entre nodos")
 					//Imprimir(listaDoble)
 					break
 				}
@@ -71,8 +76,8 @@ func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {
 		}
 	}
 }
-func Imprimir(lista *ListaDoble){
-	aux :=lista.Primero
+func Imprimir(listaR *ListaDoble){
+	aux := listaR.Primero
 	for aux != nil{
 		fmt.Printf("Nombre %v ->", aux.Tienda.Nombre)
 		aux = aux.Siguiente
