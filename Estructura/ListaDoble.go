@@ -2,6 +2,7 @@ package Estructura
 
 import (
 	"ProyectoEDD/Datos"
+	"ProyectoEDD/Pedidos"
 	"fmt"
 )
 
@@ -10,6 +11,7 @@ type Nodo struct {
 	Anterior *Nodo
 	Tienda *Datos.Tienda
 	IdNodo int
+	ArbolPedidos *Pedidos.ArbolPedido
 }
 
 type ListaDoble struct {
@@ -22,7 +24,7 @@ type ListaDoble struct {
 }
 
 func NewNodo(tienda *Datos.Tienda, idNodo int) *Nodo  {
-	return &Nodo{nil,nil,tienda, idNodo}
+	return &Nodo{nil,nil,tienda, idNodo, nil}
 }
 
 func NewListaDoble(identificador string, departamento string, indice string) *ListaDoble {
@@ -36,7 +38,7 @@ func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {
 		listaDoble.Primero = nuevoNodo
 		listaDoble.Ultimo = nuevoNodo
 		listaDoble.Contador += 1
-		fmt.Println("Agregado en cabeza")
+		//fmt.Println("Agregado en cabeza")
 		//Imprimir(listaDoble)
 	}else { //para una lista no vacia
 		aux := listaDoble.Primero
@@ -47,7 +49,7 @@ func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {
 					aux.Siguiente = nuevoNodo
 					nuevoNodo.Anterior = aux
 					listaDoble.Contador += 1
-					fmt.Println("Agregado al final")
+					//fmt.Println("Agregado al final")
 					//Imprimir(listaDoble)
 					break
 				}else {
@@ -59,7 +61,7 @@ func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {
 					nuevoNodo.Siguiente = aux
 					aux.Anterior = nuevoNodo
 					listaDoble.Contador += 1
-					fmt.Println("Agregado en cabeza no primero")
+					//fmt.Println("Agregado en cabeza no primero")
 					break
 					//Imprimir(listaDoble)
 				}else{
@@ -68,7 +70,7 @@ func Insertar(tienda *Datos.Tienda, listaDoble *ListaDoble, idNodo int)  {
 					aux.Anterior = nuevoNodo
 					nuevoNodo.Siguiente = aux
 					listaDoble.Contador += 1
-					fmt.Println("entre nodos")
+					//fmt.Println("entre nodos")
 					//Imprimir(listaDoble)
 					break
 				}

@@ -1,7 +1,6 @@
-package Grafo
+package Pedidos
 
 import (
-	"ProyectoEDD/Arboles"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -9,7 +8,7 @@ import (
 	"strconv"
 )
 
-func Generar_Grafo(arbol *Arboles.Arbol){
+func Generar_Grafo(arbol *ArbolPedido){
 	estructuraDot := "digraph G{\nnode [shape=circle];\n"
 	acum := ""
 
@@ -19,7 +18,7 @@ func Generar_Grafo(arbol *Arboles.Arbol){
 
 	estructuraDot += acum + "\n}\n"
 
-	path := "grafoAVL.dot"
+	path := "grafoPedidos.dot"
 	//SE ESCRIBE EL ARCHIVO .DOT
 	var _, err = os.Stat(path)
 	if os.IsNotExist(err){
@@ -53,19 +52,18 @@ func Generar_Grafo(arbol *Arboles.Arbol){
 
 	//PARTE EN DONDE GENERO EL GRAFO
 	path2, _ := exec.LookPath("dot")
-	cmd, _ := exec.Command(path2, "-Tpng","grafoAVL.dot").Output()
+	cmd, _ := exec.Command(path2, "-Tpng","grafoPedidos.dot").Output()
 	mode := int(0777)
-	ioutil.WriteFile("grafoAVL.png",cmd, os.FileMode(mode))
+	ioutil.WriteFile("grafoPedidos.png",cmd, os.FileMode(mode))
 
 }
 
-func Recorrer_Arbol(actual **Arboles.NodoArbol, acum *string){
+func Recorrer_Arbol(actual **NodoPedido, acum *string){
 
 	if *actual != nil{
 
 		//SE OBTIENE INFORMACION DEL NODO ACTUAL
-		*acum += "\"" + fmt.Sprint(&(*actual)) + "\"[label=\"" + strconv.Itoa((*actual).Producto.Codigo) +" Cant: "+strconv.Itoa((*actual).Producto.Cantidad) +"\"];\n"
-		fmt.Println((*actual).Producto.Imagen)
+		*acum += "\"" + fmt.Sprint(&(*actual)) + "\"[label=\"" + strconv.Itoa((*actual).Anio) +"\"];\n"
 		//VIAJAMOS A LA SUBRAMA IZQ
 		if (*actual).Left != nil{
 			*acum += "\"" +  fmt.Sprint(&(*actual)) + "\" -> \"" + fmt.Sprint(&(*actual).Left) + "\";\n"

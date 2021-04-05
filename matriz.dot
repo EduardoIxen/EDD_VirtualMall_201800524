@@ -1,0 +1,72 @@
+digraph G{
+node [shape=box];
+mt[label="Principal"];
+4[label="4" width=2 style=filled, fillcolor=bisque1, group=1];
+11[label="11" width=2 style=filled, fillcolor=bisque1, group=1];
+21[label="21" width=2 style=filled, fillcolor=bisque1, group=1];
+mt -> 4 -> 11 -> 21;
+"Television y video"[label="Television y video" style=filled, fillcolor=lightskyblue, group="Television y video"];
+mt ->"Television y video";
+{rank=same; mt; 4 ; 11 ; 21;
+}
+"&{0xc000005240 0xc000005220 0xc000005280 0xc0000058e0}"[label="Tamaño1 Dia:21 ", group="Television y video"];
+"21" -> "&{0xc000005240 0xc000005220 0xc000005280 0xc0000058e0}"
+"&{0xc000005240 0xc0000058c0 0xc000005880 0xc000005d00}"[label="Tamaño2 Dia:11 ", group="Television y video"];
+"11" -> "&{0xc000005240 0xc0000058c0 0xc000005880 0xc000005d00}"
+"&{0xc000005240 0xc000005ce0 0xc000005ca0 <nil>}"[label="Tamaño1 Dia:4 ", group="Television y video"];
+"4" -> "&{0xc000005240 0xc000005ce0 0xc000005ca0 <nil>}"
+{rank=same;"Television y video";"&{0xc000005240 0xc000005220 0xc000005280 0xc0000058e0}";
+"Television y video";"&{0xc000005240 0xc0000058c0 0xc000005880 0xc000005d00}";
+"Television y video";"&{0xc000005240 0xc000005ce0 0xc000005ca0 <nil>}";
+}
+}
+12840 0xc000212ea0}";
+"Television y video";"&{0xc000212800 0xc000212e80 0xc000212e40 0xc000212f40}";
+"Television y video";"&{0xc000212800 0xc000212e80 0xc000212e40 0xc0002132a0}";
+"Television y video";"&{0xc000212800 0xc000213280 0xc000213240 <nil>}";
+}
+}
+0000a8de0 0xc0000a8fe0}"
+"&{0xc0000a8ac0 0xc0000a8fc0 0xc0000a8f80 0xc0000a90a0}"[label="Tamaño1 Dia:5 ", group="Seguridad y vigilancia"];
+"5" -> "&{0xc0000a8ac0 0xc0000a8fc0 0xc0000a8f80 0xc0000a90a0}"
+"&{0xc0000a8ac0 0xc0000a9080 0xc0000a9040 0xc0000a9220}"[label="Tamaño1 Dia:13 ", group="Seguridad y vigilancia"];
+"13" -> "&{0xc0000a8ac0 0xc0000a9080 0xc0000a9040 0xc0000a9220}"
+"&{0xc0000a8ac0 0xc0000a9200 0xc0000a91c0 0xc0000a9300}"[label="Tamaño1 Dia:27 ", group="Seguridad y vigilancia"];
+"27" -> "&{0xc0000a8ac0 0xc0000a9200 0xc0000a91c0 0xc0000a9300}"
+"&{0xc0000a8e00 0xc0000a9080 0xc0000a92a0 0xc0000a93c0}"[label="Tamaño1 Dia:13 ", group="Television y video"];
+"13" -> "&{0xc0000a8e00 0xc0000a9080 0xc0000a92a0 0xc0000a93c0}"
+"&{0xc0000a8e00 0xc0000a93a0 0xc0000a9360 0xc0000a9480}"[label="Tamaño1 Dia:11 ", group="Television y video"];
+"11" -> "&{0xc0000a8e00 0xc0000a93a0 0xc0000a9360 0xc0000a9480}"
+"&{0xc0000a8ac0 0xc0000a9460 0xc0000a9420 0xc0000a9540}"[label="Tamaño1 Dia:16 ", group="Seguridad y vigilancia"];
+"16" -> "&{0xc0000a8ac0 0xc0000a9460 0xc0000a9420 0xc0000a9540}"
+"&{0xc0000a8e00 0xc0000a9520 0xc0000a94e0 0xc0000a9600}"[label="Tamaño1 Dia:23 ", group="Television y video"];
+"23" -> "&{0xc0000a8e00 0xc0000a9520 0xc0000a94e0 0xc0000a9600}"
+"&{0xc0000a8ac0 0xc0000a95e0 0xc0000a95a0 0xc0000a96c0}"[label="Tamaño1 Dia:31 ", group="Seguridad y vigilancia"];
+"31" -> "&{0xc0000a8ac0 0xc0000a95e0 0xc0000a95a0 0xc0000a96c0}"
+"&{0xc0000a8e00 0xc0000a96a0 0xc0000a9660 <nil>}"[label="Tamaño1 Dia:4 ", group="Television y video"];
+"4" -> "&{0xc0000a8e00 0xc0000a96a0 0xc0000a9660 <nil>}"
+{rank=same;"Seguridad y vigilancia";"&{0xc0000a8ac0 0xc0000a8aa0 0xc0000a8d00 0xc0000a8e40}";
+"Seguridad y vigilancia";"&{0xc0000a8ac0 0xc0000a8fc0 0xc0000a8f80 0xc0000a90a0}";
+"Seguridad y vigilancia";"&{0xc0000a8ac0 0xc0000a9080 0xc0000a9040 0xc0000a9220}";
+"Seguridad y vigilancia";"&{0xc0000a8ac0 0xc0000a9200 0xc0000a91c0 0xc0000a9300}";
+"Seguridad y vigilancia";"&{0xc0000a8ac0 0xc0000a9460 0xc0000a9420 0xc0000a9540}";
+"Seguridad y vigilancia";"&{0xc0000a8ac0 0xc0000a95e0 0xc0000a95a0 0xc0000a96c0}";
+}{rank=same;"Television y video";"&{0xc0000a8e00 0xc0000a8e20 0xc0000a8de0 0xc0000a8fe0}";
+"Television y video";"&{0xc0000a8e00 0xc0000a9080 0xc0000a92a0 0xc0000a93c0}";
+"Television y video";"&{0xc0000a8e00 0xc0000a93a0 0xc0000a9360 0xc0000a9480}";
+"Television y video";"&{0xc0000a8e00 0xc0000a9520 0xc0000a94e0 0xc0000a9600}";
+"Television y video";"&{0xc0000a8e00 0xc0000a96a0 0xc0000a9660 <nil>}";
+}
+}
+32ca0 0xc000232dc0}";
+"Television y video";"&{0xc000232940 0xc000232da0 0xc000232d60 0xc000232e80}";
+"Television y video";"&{0xc000232940 0xc000232f20 0xc000232ee0 0xc000233000}";
+"Television y video";"&{0xc000232940 0xc0002330a0 0xc000233060 <nil>}";
+}
+}
+04920 0xc000004a40}";
+"Television y video";"&{0xc000004540 0xc000004a20 0xc0000049e0 0xc000004b00}";
+"Television y video";"&{0xc000004540 0xc000004ba0 0xc000004b60 0xc000004c80}";
+"Television y video";"&{0xc000004540 0xc000004d20 0xc000004ce0 <nil>}";
+}
+}

@@ -4,17 +4,19 @@ digraph G {
 3[label="Nombre: Alvarez Loya S.A. \n Calificacion: 2"];
 1[label="Nombre: Agosto, Hernández y Ojeda Asociados \n Calificacion: 2"];
 2[label="Nombre: Alejandro Hermanos \n Calificacion: 3"];
+5[label="Nombre: Borrego Rocha e Hijos \n Calificacion: 2"];
 4[label="Nombre: Borrego Rocha e Hijos \n Calificacion: 3"];
-5[label="Nombre: Baca y Viera \n Calificacion: 4"];
-6[label="Nombre: Agosto, Hernández y Ojeda Asociados \n Calificacion: 1"];
-7[label="Nombre: Borrego Rocha e Hijos \n Calificacion: 2"];
+6[label="Nombre: Baca y Viera \n Calificacion: 4"];
+7[label="Nombre: Agosto, Hernández y Ojeda Asociados \n Calificacion: 1"];
+8[label="Nombre: Borrego Rocha e Hijos \n Calificacion: 2"];
 3->1;
 1->3;
 vec:f2 -> 3;
 vec:f3 -> 2;
+vec:f7 -> 5;
 vec:f8 -> 4;
-vec:f9 -> 5;
-vec:f11 -> 6;
-vec:f17 -> 7;
+vec:f9 -> 6;
+vec:f11 -> 7;
+vec:f17 -> 8;
 
 }
